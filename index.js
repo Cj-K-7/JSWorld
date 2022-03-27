@@ -1,94 +1,94 @@
-const operation = document.querySelector("#operation");
-const resultPanel = document.querySelector("#result");
+const formularPanel = document.querySelector("#formularPanel");
+const resultPanel = document.querySelector("#resultPanel");
 const calculator = document.querySelector("#calculator");
+const numberPad = document.querySelector("#numberPad");
 
-operation.innerText = "";
-result.innerText = " result";
-
-const calculatorBtns = [
-  "(",
-  ")",
-  "%",
-  "C",
-  "7",
-  "8",
-  "9",
-  "÷",
-  "4",
-  "5",
-  "6",
-  "×",
-  "1",
-  "2",
-  "3",
-  "-",
-  "0",
-  ".",
-  "=",
-  "+",
-];
-
-let records = { formulars: [""], results: [""] };
-
-const formularTrans = (formular) => {
-  let string = formular;
-  if ((string + "").includes("×"))
-    string = (formular + "").replace(/[×]/g, "*");
-  if ((string + "").includes("÷"))
-    string = (formular + "").replace(/[÷]/g, "/");
-  if ((string + "").match(/^[+-/*]+/))
-    string = records.results[records.results.length-1]+string;
-    console.log(records.results)
-    console.log(string);
-  const operators = (string + "").split(/[0-9]+/).filter((oper) => oper);
-  const numbers = (string + "").split(/[+-/*]+/).map((a) => parseFloat(a));
-
-  const result = numbers.reduce((acc, cur, i) => {
-    switch (operators[i - 1]) {
-      case "+":
-        acc += cur;
-        break;
-      case "-":
-        acc -= cur;
-        break;
-      case "/":
-        acc /= cur;
-        break;
-      case "*":
+resultPanel.innerText = "";
+//function key pad
+const operating = ( numbers , operators ) => {
+  const result = numbers.reduce((acc, cur, idx) => {
+    switch (operators[idx - 1]) {
+      case "×":
         acc *= cur;
-        break;
+        return acc;
+      case "÷":
+        acc /= cur;
+        return acc;
+      default:
+        acc += cur;
+        return acc;
     }
-    return acc;
   });
+  return result;
+}
 
-  resultPanel.innerHTML = result;
-  records.formulars.push(operation.innerText);
-  records.results.push(resultPanel.innerHTML);
+const equalButtonClick = (value) => {
+  let formular = value;
+  if (/^[^0-9]/.test(value)) {formular = resultPanel.innerText + value;}
+
+  const numbers = (formular + "")
+    .split(/(?=-)|[^0-9.-]+/g)
+    .filter((element) => element)
+    .map((number) => parseFloat(number));
+  const operators = (formular + "")
+    .split(/[0-9.-]+/g)
+    .filter((element) => element);
+
+  const result = operating(numbers, operators);
+
+  formularPanel.value = "";
+  resultPanel.innerText = result;
+  return result;
 };
 
-const onClick = (event) => {
+const functionButtonClick = (event) => {
   const {
     target: { value },
   } = event;
-
   switch (value) {
     case "C":
-      operation.innerText = "";
+      formularPanel.value = "";
+      resultPanel.innerText = "0";
       return;
     case "=":
-      formularTrans(operation.innerText);
-      operation.innerText = "";
+      equalButtonClick(formularPanel.value);
       return;
+    default :
+      resultPanel.innerText = equalButtonClick(formularPanel.value);
+      formularPanel.value = "";
+      break;
   }
-  operation.innerText += value;
+  formularPanel.value += value;
 };
 
-for (let i = 0; i < calculatorBtns.length; i++) {
-  const btnText = calculatorBtns[i];
-  let button = document.createElement("button");
-  button.classList.add("btn");
-  button.value = btnText;
-  button.innerText = btnText;
-  button.addEventListener("click", onClick);
-  calculator.appendChild(button);
+const functionButtons = ["x²", "√", "%", "C", "÷", "×", "-", "+", "="];
+
+for (let i = 0; i < functionButtons.length; i++) {
+  const functionButton = document.createElement("button");
+  functionButton.innerText = functionButtons[i];
+  functionButton.value = functionButtons[i];
+  functionButton.id = functionButtons[i];
+  functionButton.classList.add("functionButton");
+  functionButton.addEventListener("click", functionButtonClick);
+  calculator.appendChild(functionButton);
+}
+
+//number Key pad
+const numberButtons = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, "."];
+
+const numberButtonClick = (event) => {
+  const {
+    target: { value },
+  } = event;
+  formularPanel.value += value;
+};
+
+for (let i = 0; i < numberButtons.length; i++) {
+  const numberButton = document.createElement("button");
+  numberButton.innerText = numberButtons[i];
+  numberButton.value = numberButtons[i];
+  numberButton.id = "num" + numberButtons[i];
+  numberButton.classList.add("numberButton");
+  numberButton.addEventListener("click", numberButtonClick);
+  numberPad.appendChild(numberButton);
 }
