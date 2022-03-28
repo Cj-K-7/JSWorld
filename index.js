@@ -5,13 +5,19 @@ const numberPad = document.querySelector("#numberPad");
 
 resultPanel.innerText = "";
 //function key pad
-const operating = ( numbers , operators ) => {
+const operating = (numbers, operators) => {
   const result = numbers.reduce((acc, cur, idx) => {
     switch (operators[idx - 1]) {
       case "×":
         acc *= cur;
         return acc;
+      case "*":
+        acc *= cur;
+        return acc;
       case "÷":
+        acc /= cur;
+        return acc;
+      case "/":
         acc /= cur;
         return acc;
       default:
@@ -20,11 +26,13 @@ const operating = ( numbers , operators ) => {
     }
   });
   return result;
-}
+};
 
 const equalButtonClick = (value) => {
   let formular = value;
-  if (/^[^0-9]/.test(value)) {formular = resultPanel.innerText + value;}
+  if (/^[^0-9]/.test(value)) {
+    formular = resultPanel.innerText + value;
+  }
 
   const numbers = (formular + "")
     .split(/(?=-)|[^0-9.-]+/g)
@@ -46,15 +54,24 @@ const functionButtonClick = (event) => {
     target: { value },
   } = event;
   switch (value) {
-    case "C":
-      formularPanel.value = "";
-      resultPanel.innerText = "0";
-      return;
     case "=":
       equalButtonClick(formularPanel.value);
       return;
-    default :
-      resultPanel.innerText = equalButtonClick(formularPanel.value);
+    case "√":
+      formularPanel.value = Math.sqrt(formularPanel.value);
+      return;
+    case "x²":
+      resultPanel.innerText = formularPanel.value ** 2;
+      formularPanel.value = "";
+      return;
+    case "%":
+      resultPanel.innerText = formularPanel.value / 2;
+      formularPanel.value = "";
+      return;
+    default:
+      resultPanel.innerText = formularPanel.value
+        ? equalButtonClick(formularPanel.value)
+        : equalButtonClick(resultPanel.innerText + formularPanel.value);
       formularPanel.value = "";
       break;
   }
@@ -72,7 +89,13 @@ for (let i = 0; i < functionButtons.length; i++) {
   functionButton.addEventListener("click", functionButtonClick);
   calculator.appendChild(functionButton);
 }
+const buttonClear = () => {
+  console.log("Clear Panel");
+  formularPanel.value = "";
+  resultPanel.innerText = "0";
+};
 
+document.querySelector("#C").addEventListener("click", buttonClear);
 //number Key pad
 const numberButtons = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, "."];
 
