@@ -1,0 +1,12 @@
+#dragAndDrop {
+    position: absolute;
+    left : 90%;
+    top : 20px;
+    padding : 30px;
+    background-color: aquamarine;
+}
+#dragAndDrop nav {
+    display: grid;
+    grid-template-columns: 1 1fr;
+    gap: 20px
+}

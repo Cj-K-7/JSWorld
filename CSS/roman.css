@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+#convertToRoman{
+    text-align: center;
+}
+#decimalNumber{
+    font-size: 28px;
+    text-align: end;
+}
+
+#romanNumber{
+    font-family: 'Roboto Slab', serif;
+    font-weight: 600;
+    font-size: 52px;
+}

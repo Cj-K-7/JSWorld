@@ -7,19 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./CSS/styles.css" />
   <script src="https://kit.fontawesome.com/59acdc8b55.js" crossorigin="anonymous"></script>
-  <script defer src="/index.js"></script>
+  <script defer src="/JS/calculator.js"></script>
+  <script defer src="/JS/romanConverter.js"></script>
+  <script defer src="/JS/dragAndDrop.js"></script>
   <title>Vanilla</title>
 </head>
 
 <body>
+  <div id="dragAndDrop" >
+    <nav>
+      <a>Calculator</a>
+      <a>RomanNumber</a>
+      <a>New</a>
+    </nav>
+  </div>
   <div id="calculatorContainer">
-
-    <input id="formularPanel"></input>
+    <div id="formularPanel"></div>
     <div id="resultPanel"></div>
     <div id="calculator"">
       <div id="numberPad"></div>
     </div>
-  
+    <div id="histories"></div>
+  </div>
+  <div id="convertToRoman">
+    <input type="number" min="0" id="decimalNumber">
+    <div id="romanNumber">
+    </div>
   </div>
 </body>
 
