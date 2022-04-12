@@ -20,5 +20,8 @@
   "homepage": "https://github.com/Cj-K-7/JSWorld#readme",
   "devDependencies": {
     "electron": "^17.2.0"
+  },
+  "dependencies": {
+    "three": "^0.139.2"
   }
 }
